@@ -3,8 +3,9 @@ import StocksGrid from './components/StocksGrid';
 
 class App extends React.Component {
   render() {
-    return (
+    return (<div>test
       <StocksGrid />
+      </div>
      );
   }
 }

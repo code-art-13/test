@@ -1,11 +1,10 @@
 //Add Stocks Grid to display
 import React from 'react';
+import StockDetail from './StockDetail';
 
 const StocksGrid = () => {
   return (
-  <div>
-      Stocks Grid
-  </div>);
+    <StockDetail />);
 };
 
 export default StocksGrid;
