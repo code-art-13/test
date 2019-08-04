@@ -49,22 +49,22 @@ let counter = 0;
 const getStocksFromExternalSource = async socket => {
     try {
       let data = stockQuotesData;
-
-      // const res = await axios.get("https://api.worldtradingdata.com/api/v1/stock?symbol=NKE,AAPL,MSFT,AMZN,FB&api_token=22rAtaCkfDt5fDy5SAIyzfsj4yhnvZWD5mp7E6pZ4gnLM5n6HyLHQQXtiNmx");
-      // data = res.data.data;
+       // comment below if api calls expire
+      const res = await axios.get("https://api.worldtradingdata.com/api/v1/stock?symbol=NKE,AAPL,MSFT,AMZN,FB&api_token=22rAtaCkfDt5fDy5SAIyzfsj4yhnvZWD5mp7E6pZ4gnLM5n6HyLHQQXtiNmx");
+      data = res.data.data;
 
       console.log("API_RESPONSE_NUMBER_"+ ++counter);
       console.log(data);
 
-      // Simulating the real time stock by changing price
-      data.map((stockQuote, index) => {
-        let inceaseBy = (index + 1)/100;
-        let increasedPrice = parseFloat(stockQuote.price) + inceaseBy;
-        stockQuote.price = parseFloat(increasedPrice).toFixed(2).toString();
-        console.log(`Symbol_${stockQuote.symbol}_${stockQuote.price}`);
-        let timeStamp = new Date();
-        stockQuote.last_trade_time = `${timeStamp.toDateString()} ${timeStamp.toLocaleTimeString()}`;
-      });
+      // uncomment here to simulate the real time stock by changing price
+      // data.map((stockQuote, index) => {
+      //   let inceaseBy = (index + 1)/100;
+      //   let increasedPrice = parseFloat(stockQuote.price) + inceaseBy;
+      //   stockQuote.price = parseFloat(increasedPrice).toFixed(2).toString();
+      //   console.log(`Symbol_${stockQuote.symbol}_${stockQuote.price}`);
+      //   let timeStamp = new Date();
+      //   stockQuote.last_trade_time = `${timeStamp.toDateString()} ${timeStamp.toLocaleTimeString()}`;
+      // });
     socket.emit("receiveStocksDataFromAPI", { stockQuotes: data, counter: counter}); 
     } catch (error) {
       console.error(`Error: ${error}`);
