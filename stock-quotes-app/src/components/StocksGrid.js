@@ -1,6 +1,5 @@
 //Add Stocks Grid to display
 import React from 'react';
-import styled from 'styled-components/macro';
 import MUIDataTable from "mui-datatables";
 import { MuiThemeProvider, createMuiTheme, responsiveFontSizes } from '@material-ui/core';
 import purple from '@material-ui/core/colors/purple';
@@ -72,16 +71,14 @@ class StocksGrid extends React.Component {
     }
     const stockQuotesData = this.props.stockQuotesData;
     return (
-     <div style={wrapperStyle}>
       <MuiThemeProvider theme={theme}>
                   <MUIDataTable
                           title={"Real-time stocks data"}
-                          data={this.props.stockQuotesData}
+                          data={stockQuotesData}
                           columns={columns}
                           options={options}
                   />
-        </MuiThemeProvider>
-      </div>
+      </MuiThemeProvider>
     );
   }
 }
