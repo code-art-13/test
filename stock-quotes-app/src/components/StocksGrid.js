@@ -1,16 +1,11 @@
 //Add Stocks Grid to display
 import React from 'react';
-import axios from 'axios';
 import styled from 'styled-components/macro';
 import MUIDataTable from "mui-datatables";
-import TableRow from "@material-ui/core/TableRow";
-import TableCell from "@material-ui/core/TableCell";
 import { MuiThemeProvider, createMuiTheme, responsiveFontSizes } from '@material-ui/core';
 import purple from '@material-ui/core/colors/purple';
 import green from '@material-ui/core/colors/green';
-import socketIOClient from "socket.io-client";
-
-const stockQuotesData = require('../server/mockData'); 
+import StockDetail from "./StockDetail";
 
 const columns = [
     {
@@ -18,14 +13,6 @@ const columns = [
         label: "Symbol",
         options: {
          filter: false,
-         sort: true,
-        }
-       },
-       {
-        name: "name",
-        label: "Name",
-        options: {
-         filter: true,
          sort: true,
         }
        },
@@ -38,35 +25,6 @@ const columns = [
         }
        },
        {
-        name: "day_high",
-        label: "high",
-        options: {
-         filter: true,
-         sort: true,
-        }
-       },
-       {
-        name: "day_low",
-        label: "low",
-        options: {
-         filter: true,
-         sort: true,
-        }
-       },
-       {
-        name: "day_change",
-        label: "Day change",
-        options: {
-         filter: true,
-         sort: true,
-         setCellProps: (value) => {
-            return {
-              styles: { color: parseFloat(value) > 0? 'green': 'red'}
-            };
-          }
-        },
-       },
-       {
         name: "last_trade_time",
         label: "Last updated",
         options: {
@@ -76,19 +34,15 @@ const columns = [
        },
 ];
 const options = {
-      responsive: 'scroll',
-      expandableRows: true,
-      expandableRowsOnClick: true,
-      renderExpandableRow: (rowData, rowMeta) => {
-        const colSpan = rowData.length + 1;
-        return (
-          <TableRow>
-            <TableCell colSpan={colSpan}>
-              Custom expandable row option. Data: {JSON.stringify(rowData)}
-            </TableCell>
-          </TableRow>
-        );
-      },
+    responsive: 'scroll',
+    expandableRows: true,
+    expandableRowsOnClick: true,
+    renderExpandableRow: (rowData, rowMeta) => {
+      const colSpan = rowData.length + 1;
+      return (
+        <StockDetail rowData={rowData} colSpan={colSpan} />
+      );
+    },
 };
 
 let theme = createMuiTheme({
@@ -104,41 +58,30 @@ let theme = createMuiTheme({
   });
   theme = responsiveFontSizes(theme);
 
-const getStockQuotesApi = async(context) =>{
-  const stockQuotesData = await axios.get("http://localhost:4000/api/getStocks");
-  context.setState({ data: stockQuotesData });
-}
-
 class StocksGrid extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            data: [],
-            endpoint: "http://localhost:4000",
-        }
+  shouldComponentUpdate(nextProps, nextState) {
+    if (this.props.stockQuotesData === nextProps.stockQuotesData) {
+      return false;
+    } else {
+      return true;
     }
-    componentDidMount() {
-      const {endpoint} = this.state;
-      const socket = socketIOClient(endpoint);
-      socket.on("receiveStocksDataFromAPI", data => this.setState({ data }));
-      // this.setState({ data: stockQuotesData });
-    }
+  }
   render(){
-    // const state = this.state;
-    const Wrapper = styled.div`
-     margin: 20px;
-    `;
+    const wrapperStyle = {
+     margin: "20px"
+    }
+    const stockQuotesData = this.props.stockQuotesData;
     return (
-        <Wrapper>
-            <MuiThemeProvider theme={theme}>
-                <MUIDataTable
-                        title={"Real-time stocks data"}
-                        data={this.state.data}
-                        columns={columns}
-                        options={options}
-                />
-            </MuiThemeProvider>
-        </Wrapper>
+     <div style={wrapperStyle}>
+      <MuiThemeProvider theme={theme}>
+                  <MUIDataTable
+                          title={"Real-time stocks data"}
+                          data={this.props.stockQuotesData}
+                          columns={columns}
+                          options={options}
+                  />
+        </MuiThemeProvider>
+      </div>
     );
   }
 }
