@@ -1,0 +1,129 @@
+import React, { useState } from 'react';
+
+const CustomTable = () => {
+  const [showColumns, setShowColumns] = useState({
+    name: true,
+    age: true,
+    email: false,
+    phone: false,
+  });
+  const [view, setView] = useState('table');
+
+  const toggleColumn = (column) => {
+    setShowColumns((prevColumns) => ({
+      ...prevColumns,
+      [column]: !prevColumns[column],
+    }));
+  };
+
+  const switchView = (selectedView) => {
+    setView(selectedView);
+  };
+
+  return (
+    <div className="p-8">
+      <div className="mb-4">
+        <label htmlFor="table-view" className="mr-2">
+          Table View
+        </label>
+        <input
+          type="radio"
+          id="table-view"
+          name="view"
+          checked={view === 'table'}
+          onChange={() => switchView('table')}
+        />
+        <label htmlFor="list-view" className="ml-4 mr-2">
+          List View
+        </label>
+        <input
+          type="radio"
+          id="list-view"
+          name="view"
+          checked={view === 'list'}
+          onChange={() => switchView('list')}
+        />
+        <label htmlFor="tile-view" className="ml-4 mr-2">
+          Tile View
+        </label>
+        <input
+          type="radio"
+          id="tile-view"
+          name="view"
+          checked={view === 'tile'}
+          onChange={() => switchView('tile')}
+        />
+      </div>
+
+      {view === 'table' && (
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead>
+              <tr>
+                {showColumns.name && <th className="text-left">Name</th>}
+                {showColumns.age && <th className="text-left">Age</th>}
+                {showColumns.email && <th className="text-left">Email</th>}
+                {showColumns.phone && <th className="text-left">Phone</th>}
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                {showColumns.name && <td>Jane Doe</td>}
+                {showColumns.age && <td>30</td>}
+                {showColumns.email && <td>jane@example.com</td>}
+                {showColumns.phone && <td>123-456-7890</td>}
+              </tr>
+              <tr>
+                {showColumns.name && <td>John Smith</td>}
+                {showColumns.age && <td>28</td>}
+                {showColumns.email && <td>john@example.com</td>}
+                {showColumns.phone && <td>987-654-3210</td>}
+              </tr>
+              {/* Add more rows as needed */}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      {view === 'list' && (
+        <div className="p-4">
+          <ul>
+            <li>
+              {showColumns.name && <p>Name: Jane Doe</p>}
+              {showColumns.age && <p>Age: 30</p>}
+              {showColumns.email && <p>Email: jane@example.com</p>}
+              {showColumns.phone && <p>Phone: 123-456-7890</p>}
+            </li>
+            <li>
+              {showColumns.name && <p>Name: John Smith</p>}
+              {showColumns.age && <p>Age: 28</p>}
+              {showColumns.email && <p>Email: john@example.com</p>}
+              {showColumns.phone && <p>Phone: 987-654-3210</p>}
+            </li>
+            {/* Add more list items as needed */}
+          </ul>
+        </div>
+      )}
+
+      {view === 'tile' && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
+          <div className="p-4 border rounded">
+            {showColumns.name && <p>Name: Jane Doe</p>}
+            {showColumns.age && <p>Age: 30</p>}
+            {showColumns.email && <p>Email: jane@example.com</p>}
+            {showColumns.phone && <p>Phone: 123-456-7890</p>}
+          </div>
+          <div className="p-4 border rounded">
+            {showColumns.name && <p>Name: John Smith</p>}
+            {showColumns.age && <p>Age: 28</p>}
+            {showColumns.email && <p>Email: john@example.com</p>}
+            {showColumns.phone && <p>Phone: 987-654-3210</p>}
+          </div>
+          {/* Add more tiles as needed */}
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default CustomTable;
